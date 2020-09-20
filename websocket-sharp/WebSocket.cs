@@ -330,6 +330,8 @@ namespace WebSocketSharp
 
     #region Public Properties
 
+    public IEnumerable<KeyValuePair<string,string>> CustomHeaders { get; set; }
+
     /// <summary>
     /// Gets or sets the compression method used to compress a message.
     /// </summary>
@@ -1336,6 +1338,14 @@ namespace WebSocketSharp
 
       headers["Sec-WebSocket-Version"] = _version;
 
+      if (CustomHeaders != null)
+      {
+        foreach (var header in CustomHeaders)
+        {
+            headers[header.Key] = header.Value;
+        }
+      }
+
       AuthenticationResponse authRes = null;
       if (_authChallenge != null && _credentials != null) {
         authRes = new AuthenticationResponse (_authChallenge, _credentials, _nonceCount);
@@ -1370,6 +1380,14 @@ namespace WebSocketSharp
 
       if (_cookies.Count > 0)
         ret.SetCookies (_cookies);
+
+      if (CustomHeaders != null)
+      {
+        foreach (var header in CustomHeaders)
+        {
+            headers[header.Key] = header.Value;
+        }
+      }
 
       return ret;
     }
